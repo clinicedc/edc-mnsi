@@ -1,4 +1,4 @@
-|pypi| |actions| |codecov| |downloads| |pyup|
+|pypi| |actions| |codecov| |downloads|
 
 edc-mnsi
 --------
@@ -22,7 +22,3 @@ Uses Michigan Neuropathy Screening Instrument (MNSI), see:
 
 .. |downloads| image:: https://pepy.tech/badge/edc-mnsi
     :target: https://pepy.tech/project/edc-mnsi
-
-.. |pyup| image:: https://pyup.io/repos/github/clinicedc/edc-mnsi/shield.svg
-    :target: https://pyup.io/repos/github/clinicedc/edc-mnsi/
-    :alt: Updates
