@@ -1,17 +1,11 @@
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from edc_constants.choices import YES_NO, YES_NO_NA
-from edc_constants.constants import NOT_APPLICABLE, YES
-from edc_model import models as edc_models
+from edc_constants.choices import YES_NO, YES_NO_NA, YES_NO_NOT_EXAMINED
+from edc_constants.constants import NOT_APPLICABLE, NOT_EXAMINED, YES
 
 from .calculator import MnsiCalculator
-from .choices import (
-    ANKLE_REFLEX_CHOICES,
-    MONOFILAMENT_CHOICES,
-    ULCERATION_CHOICES,
-    VIBRATION_PERCEPTION_CHOICES,
-)
+from .factory import foot_exam_model_mixin_factory
 
 abnormal_foot_appearance_observations_model = getattr(
     settings,
@@ -20,7 +14,11 @@ abnormal_foot_appearance_observations_model = getattr(
 )
 
 
-class MnsiModelMixin(models.Model):
+class MnsiModelMixin(
+    foot_exam_model_mixin_factory("right", abnormal_foot_appearance_observations_model),
+    foot_exam_model_mixin_factory("left", abnormal_foot_appearance_observations_model),
+    models.Model,
+):
 
     """Neuropathy screening tool.
 
@@ -32,11 +30,10 @@ class MnsiModelMixin(models.Model):
     """
 
     mnsi_performed = models.CharField(
-        verbose_name="Is the MNSI assessment being performed today?",
+        verbose_name="Is the MNSI assessment being performed?",
         max_length=15,
         choices=YES_NO,
         default=YES,
-        help_text="(`today` is relative to the report date/time above)",
     )
 
     mnsi_not_performed_reason = models.TextField(
@@ -49,37 +46,43 @@ class MnsiModelMixin(models.Model):
     numb_legs_feet = models.CharField(
         verbose_name="Are your legs and/or feet numb?",
         max_length=15,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
     )
 
     burning_pain_legs_feet = models.CharField(
         verbose_name="Do you ever have any burning pain in your legs and/or feet?",
         max_length=15,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
     )
 
     feet_sensitive_touch = models.CharField(
         verbose_name="Are your feet too sensitive to touch?",
         max_length=15,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
     )
 
     muscle_cramps_legs_feet = models.CharField(
         verbose_name="Do you get muscle cramps in your legs and/or feet?",
         max_length=15,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
     )
 
     prickling_feelings_legs_feet = models.CharField(
         verbose_name="Do you ever have any prickling feelings in your legs or feet?",
         max_length=15,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
     )
 
     covers_touch_skin_painful = models.CharField(
         verbose_name="Does it hurt when the bed covers touch your skin?",
         max_length=15,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
     )
 
     differentiate_hot_cold_water = models.CharField(
@@ -88,154 +91,63 @@ class MnsiModelMixin(models.Model):
             "cold water?"
         ),
         max_length=15,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
     )
 
     open_sore_foot_history = models.CharField(
         verbose_name="Have you ever had an open sore on your foot?",
         max_length=15,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
     )
 
     diabetic_neuropathy = models.CharField(
         verbose_name="Has your doctor ever told you that you have diabetic neuropathy?",
         max_length=15,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
     )
 
     feel_weak = models.CharField(
         verbose_name="Do you feel weak all over most of the time?",
         max_length=15,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
     )
 
     symptoms_worse_night = models.CharField(
         verbose_name="Are your symptoms worse at night?",
         max_length=15,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
     )
 
     legs_hurt_when_walk = models.CharField(
         verbose_name="Do your legs hurt when you walk?",
         max_length=15,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
     )
 
     sense_feet_when_walk = models.CharField(
         verbose_name="Are you able to sense your feet when you walk?",
         max_length=15,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
     )
 
     skin_cracks_open_feet = models.CharField(
         verbose_name="Is the skin on your feet so dry that it cracks open?",
         max_length=15,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
     )
 
     amputation = models.CharField(
         verbose_name="Have you ever had an amputation?",
         max_length=15,
-        choices=YES_NO,
-    )
-
-    examined_right_foot = models.CharField(
-        verbose_name="Was RIGHT foot examined?", max_length=15, choices=YES_NO
-    )
-
-    normal_appearance_right_foot = models.CharField(
-        verbose_name="Does RIGHT foot appear normal?",
-        max_length=15,
         choices=YES_NO_NA,
-        default=NOT_APPLICABLE,
-    )
-
-    abnormal_obs_right_foot = models.ManyToManyField(
-        abnormal_foot_appearance_observations_model,
-        related_name="abnormal_obs_right_foot",
-        verbose_name="If NO, check all that apply to RIGHT foot?",
-        blank=True,
-    )
-
-    abnormal_obs_right_foot_other = edc_models.OtherCharField(
-        verbose_name="If other abnormality observed on RIGHT foot, please specify ..."
-    )
-
-    ulceration_right_foot = models.CharField(
-        verbose_name="Ulceration, RIGHT foot?",
-        max_length=15,
-        choices=ULCERATION_CHOICES,
-        default=NOT_APPLICABLE,
-    )
-
-    ankle_reflexes_right_foot = models.CharField(
-        verbose_name="Ankle reflexes, RIGHT foot?",
-        max_length=35,
-        choices=ANKLE_REFLEX_CHOICES,
-        default=NOT_APPLICABLE,
-    )
-
-    vibration_perception_right_toe = models.CharField(
-        verbose_name="Vibration perception at great toe, RIGHT foot?",
-        max_length=15,
-        choices=VIBRATION_PERCEPTION_CHOICES,
-        default=NOT_APPLICABLE,
-    )
-
-    monofilament_right_foot = models.CharField(
-        verbose_name="Monofilament, RIGHT foot?",
-        max_length=15,
-        choices=MONOFILAMENT_CHOICES,
-        default=NOT_APPLICABLE,
-    )
-
-    examined_left_foot = models.CharField(
-        verbose_name="Was LEFT foot examined?", max_length=15, choices=YES_NO
-    )
-
-    normal_appearance_left_foot = models.CharField(
-        verbose_name="Does LEFT foot appear normal?",
-        max_length=15,
-        choices=YES_NO_NA,
-        default=NOT_APPLICABLE,
-    )
-
-    abnormal_obs_left_foot = models.ManyToManyField(
-        abnormal_foot_appearance_observations_model,
-        related_name="abnormal_obs_left_foot",
-        verbose_name="If NO, check all that apply to LEFT foot?",
-        blank=True,
-    )
-
-    abnormal_obs_left_foot_other = edc_models.OtherCharField(
-        verbose_name="If other abnormality observed on LEFT foot, please specify ..."
-    )
-
-    ulceration_left_foot = models.CharField(
-        verbose_name="Ulceration, LEFT foot?",
-        max_length=15,
-        choices=ULCERATION_CHOICES,
-        default=NOT_APPLICABLE,
-    )
-
-    ankle_reflexes_left_foot = models.CharField(
-        verbose_name="Ankle reflexes, LEFT foot?",
-        max_length=35,
-        choices=ANKLE_REFLEX_CHOICES,
-        default=NOT_APPLICABLE,
-    )
-
-    vibration_perception_left_toe = models.CharField(
-        verbose_name="Vibration perception at great toe, LEFT foot?",
-        max_length=15,
-        choices=VIBRATION_PERCEPTION_CHOICES,
-        default=NOT_APPLICABLE,
-    )
-
-    monofilament_left_foot = models.CharField(
-        verbose_name="Monofilament, LEFT foot?",
-        max_length=15,
-        choices=MONOFILAMENT_CHOICES,
         default=NOT_APPLICABLE,
     )
 
@@ -253,11 +165,14 @@ class MnsiModelMixin(models.Model):
         blank=True,
     )
 
-    def save(self, *args, **kwargs):
+    def update_mnsi_calculated_fields(self) -> None:
+        """Calculates the MNSI scores and updates fields.
+
+        Called in a signal.
+        """
         mnsi_calculator = MnsiCalculator(model_obj=self)
         self.calculated_patient_history_score = mnsi_calculator.patient_history_score()
         self.calculated_physical_assessment_score = mnsi_calculator.physical_assessment_score()
-        super().save(*args, **kwargs)
 
     class Meta:
         abstract = True
