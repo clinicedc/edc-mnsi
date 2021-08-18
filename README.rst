@@ -1,13 +1,72 @@
-|pypi| |actions| |codecov| |downloads| |pyup|
+|pypi| |actions| |codecov| |downloads|
 
 edc-mnsi
 --------
 
-Uses Michigan Neuropathy Screening Instrument (MNSI), see:
+Django classes for the Michigan Neuropathy Screening Instrument (MNSI).
 
 * https://pubmed.ncbi.nlm.nih.gov/7821168/
 * https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3641573/ (omits monofilament testing)
 * https://medicine.umich.edu/sites/default/files/downloads/MNSI_howto.pdf
+
+MNSI scores are calculated in ``signals.py`` through a call to the ``MnsiCalculator`` and stored in two calculated fields on the model. The two calculated fields can also be viewed as read only on the form in Admin.
+
+See also:
+
+* https://github.com/clinicedc/edc
+* https://github.com/meta-trial/meta-edc
+
+Sample usage:
+
+.. code-block:: python
+
+    # models.py
+    from edc_mnsi.model_mixins import MnsiModelMixin
+    from edc_model import models as edc_models
+
+    class Mnsi(
+        MnsiModelMixin,
+        edc_models.BaseUuidModel,
+    ):
+        class Meta(MnsiModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+            verbose_name = "Michigan Neuropathy Screening Instrument (MNSI)"
+            verbose_name_plural = "Michigan Neuropathy Screening Instrument (MNSI)"
+
+.. code-block:: python
+
+    # forms.py
+    from django import forms
+    from edc_form_validators import FormValidatorMixin
+    from edc_mnsi.form_validator import MnsiFormValidator
+
+    from .models import Mnsi
+
+
+    class MnsiForm(FormValidatorMixin, forms.ModelForm):
+
+        form_validator_cls = MnsiFormValidator
+
+        class Meta:
+            model = Mnsi
+            fields = "__all__"
+
+.. code-block:: python
+
+    # admin.py
+    from edc_mnsi.admin import MnsiModelAdminMixin
+    from edc_mnsi.fieldsets import get_fieldsets
+
+    from .forms import MnsiForm
+
+    @admin.register(Mnsi, site=admin)
+    class MnsiAdmin(
+        MnsiModelAdminMixin,
+        SimpleHistoryAdmin,
+    ):
+
+        form = MnsiForm
+
+        fieldsets = get_fieldsets()
 
 
 
@@ -22,7 +81,3 @@ Uses Michigan Neuropathy Screening Instrument (MNSI), see:
 
 .. |downloads| image:: https://pepy.tech/badge/edc-mnsi
     :target: https://pepy.tech/project/edc-mnsi
-
-.. |pyup| image:: https://pyup.io/repos/github/clinicedc/edc-mnsi/shield.svg
-    :target: https://pyup.io/repos/github/clinicedc/edc-mnsi/
-    :alt: Updates
