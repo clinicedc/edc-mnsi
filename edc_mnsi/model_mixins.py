@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from edc_constants.choices import YES_NO, YES_NO_NA, YES_NO_NOT_EXAMINED
-from edc_constants.constants import NOT_APPLICABLE, NOT_EXAMINED, YES
+from edc_constants.choices import YES_NO, YES_NO_NA
+from edc_constants.constants import NOT_APPLICABLE, YES
 
 from .calculator import MnsiCalculator
 from .factory import foot_exam_model_mixin_factory
