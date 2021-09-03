@@ -30,7 +30,7 @@ def foot_exam_model_mixin_factory(
         choices=YES_NO_NOT_EXAMINED,
         default=NOT_EXAMINED,
         help_text=(
-            f"If the assessment was not performed or this "
+            "If the assessment was not performed or this "
             "foot was not examined, respond with `not examined`."
         ),
     )
@@ -39,7 +39,7 @@ def foot_exam_model_mixin_factory(
         max_length=35,
         default=NOT_EXAMINED,
         help_text=(
-            f"If the assessment was not performed or this "
+            "If the assessment was not performed or this "
             "foot was not examined, respond with `not examined`."
         ),
     )
