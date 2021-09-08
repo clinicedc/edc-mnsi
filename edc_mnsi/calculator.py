@@ -1,11 +1,8 @@
 """Michigan Neuropathy Screening Instrument (MNSI) calculators."""
-import pdb
-
 from edc_constants.constants import (
     ABSENT,
     DECREASED,
     NO,
-    NOT_EXAMINED,
     PRESENT,
     PRESENT_WITH_REINFORCEMENT,
     REDUCED,
