@@ -30,7 +30,7 @@ def foot_exam_model_mixin_factory(
         choices=YES_NO_NOT_EXAMINED,
         default=NOT_EXAMINED,
         help_text=(
-            "If the assessment was not performed or this "
+            "If the MNSI assessment was not performed or this "
             "foot was not examined, respond with `not examined`."
         ),
     )
@@ -39,7 +39,7 @@ def foot_exam_model_mixin_factory(
         max_length=35,
         default=NOT_EXAMINED,
         help_text=(
-            "If the assessment was not performed or this "
+            "If the MNSI assessment was not performed or this "
             "foot was not examined, respond with `not examined`."
         ),
     )
@@ -47,7 +47,9 @@ def foot_exam_model_mixin_factory(
     attrs = {
         f"examined_{foot_choice}_foot": models.CharField(
             verbose_name=f"Was the {foot_choice.upper()} foot examined?",
-            help_text="If the assessment was not performed, respond with `not applicable`.",
+            help_text=(
+                "If the MNSI assessment was not performed, respond with `not applicable`."
+            ),
             **yes_no__na_options,
         ),
         f"normal_appearance_{foot_choice}_foot": models.CharField(

@@ -47,7 +47,7 @@ def get_fieldsets():
             "Part 1: Patient History",
             {
                 "description": (
-                    "To be completed by the patient. If the assessment "
+                    "To be completed by the patient. If the MNSI assessment "
                     "was not performed, the response is `not applicable`."
                 ),
                 "fields": patient_history_fields,
