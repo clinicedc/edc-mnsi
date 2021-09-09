@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 from django.apps import apps as django_apps
-from django.test import TestCase, tag
+from django.test import TestCase
 from edc_constants.constants import (
     ABSENT,
     DECREASED,
@@ -698,7 +698,6 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
                 cleaned_data.update({field: YES})
 
 
-@tag("mnsi-save")
 class TestMnsiModel(TestCaseMixin, TestCase):
     def test_mnsi_calculations_saved_with_best_case_responses(self):
         responses = self.get_best_case_answers()
