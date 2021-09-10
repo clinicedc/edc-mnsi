@@ -7,6 +7,7 @@ from edc_constants.constants import (
     DECREASED,
     NO,
     NORMAL,
+    NOT_APPLICABLE,
     NOT_EXAMINED,
     OTHER,
     PRESENT,
@@ -67,6 +68,14 @@ class TestCaseMixin(TestCase):
         data = {
             "mnsi_performed": YES,
             "mnsi_not_performed_reason": None,
+        }
+        data.update(self.get_best_case_patient_history_data())
+        data.update(self.get_best_case_physical_assessment_data())
+        return data
+
+    @staticmethod
+    def get_best_case_patient_history_data():
+        return {
             # Part 1: Patient History
             "numb_legs_feet": NO,
             "burning_pain_legs_feet": NO,
@@ -84,6 +93,9 @@ class TestCaseMixin(TestCase):
             "skin_cracks_open_feet": NO,
             "amputation": NO,
         }
+
+    def get_best_case_physical_assessment_data(self):
+        data = {}
         for foot_choice in self.foot_choices:
             data.update(
                 {
@@ -94,6 +106,41 @@ class TestCaseMixin(TestCase):
                     f"ankle_reflexes_{foot_choice}_foot": PRESENT,
                     f"vibration_perception_{foot_choice}_toe": PRESENT,
                     f"monofilament_{foot_choice}_foot": NORMAL,
+                }
+            )
+        return data
+
+    def get_mnsi_not_performed_answers(self):
+        data = {
+            "mnsi_performed": NO,
+            "mnsi_not_performed_reason": "e.g. right foot in bandage",
+            # Part 1: Patient History
+            "numb_legs_feet": NOT_APPLICABLE,
+            "burning_pain_legs_feet": NOT_APPLICABLE,
+            "feet_sensitive_touch": NOT_APPLICABLE,
+            "muscle_cramps_legs_feet": NOT_APPLICABLE,
+            "prickling_feelings_legs_feet": NOT_APPLICABLE,
+            "covers_touch_skin_painful": NOT_APPLICABLE,
+            "differentiate_hot_cold_water": NOT_APPLICABLE,
+            "open_sore_foot_history": NOT_APPLICABLE,
+            "diabetic_neuropathy": NOT_APPLICABLE,
+            "feel_weak": NOT_APPLICABLE,
+            "symptoms_worse_night": NOT_APPLICABLE,
+            "legs_hurt_when_walk": NOT_APPLICABLE,
+            "sense_feet_when_walk": NOT_APPLICABLE,
+            "skin_cracks_open_feet": NOT_APPLICABLE,
+            "amputation": NOT_APPLICABLE,
+        }
+        for foot_choice in self.foot_choices:
+            data.update(
+                {
+                    f"examined_{foot_choice}_foot": NOT_APPLICABLE,
+                    f"normal_appearance_{foot_choice}_foot": NOT_EXAMINED,
+                    f"abnormal_obs_{foot_choice}_foot": self.get_empty_set(),
+                    f"ulceration_{foot_choice}_foot": NOT_EXAMINED,
+                    f"ankle_reflexes_{foot_choice}_foot": NOT_EXAMINED,
+                    f"vibration_perception_{foot_choice}_toe": NOT_EXAMINED,
+                    f"monofilament_{foot_choice}_foot": NOT_EXAMINED,
                 }
             )
         return data
@@ -119,7 +166,7 @@ class TestCaseMixin(TestCase):
 
     def get_worst_case_physical_assessment_data(self):
         data = {}
-        for foot_choice in ["left", "right"]:
+        for foot_choice in self.foot_choices:
             data.update(
                 {
                     f"examined_{foot_choice}_foot": YES,
@@ -483,8 +530,22 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
 
     form_validator_default_form_cls = MnsiFormValidator
 
-    def test_valid_form_ok(self):
+    def test_valid_best_case_form_ok(self):
         cleaned_data = deepcopy(self.get_best_case_answers())
+        form = MnsiForm(data=cleaned_data)
+        form.is_valid()
+        self.assertEqual(form._errors, {})
+
+    def test_valid_mnsi_not_performed_form_ok(self):
+        cleaned_data = deepcopy(self.get_mnsi_not_performed_answers())
+        form = MnsiForm(data=cleaned_data)
+        form.is_valid()
+        self.assertEqual(form._errors, {})
+
+    def test_valid_worst_case_form_ok(self):
+        cleaned_data = deepcopy(self.get_best_case_answers())
+        cleaned_data.update(self.get_worst_case_patient_history_data())
+        cleaned_data.update(self.get_worst_case_physical_assessment_data())
         form = MnsiForm(data=cleaned_data)
         form.is_valid()
         self.assertEqual(form._errors, {})
