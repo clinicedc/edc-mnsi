@@ -55,28 +55,16 @@ class MnsiFormValidator(FormValidator):
                 field_other=f"abnormal_obs_{foot_choice}_foot_other",
             )
 
-            self.applicable_if(
-                YES,
-                field=f"examined_{foot_choice}_foot",
-                field_applicable=f"ulceration_{foot_choice}_foot",
-                **applicable_if_opts,
-            )
+            for target_field in [
+                f"ulceration_{foot_choice}_foot",
+                f"ankle_reflexes_{foot_choice}_foot",
+                f"vibration_perception_{foot_choice}_toe",
+                f"monofilament_{foot_choice}_foot",
+            ]:
 
-            self.applicable_if(
-                YES,
-                field=f"examined_{foot_choice}_foot",
-                field_applicable=f"ankle_reflexes_{foot_choice}_foot",
-                **applicable_if_opts,
-            )
-            self.applicable_if(
-                YES,
-                field=f"examined_{foot_choice}_foot",
-                field_applicable=f"vibration_perception_{foot_choice}_toe",
-                **applicable_if_opts,
-            )
-            self.applicable_if(
-                YES,
-                field=f"examined_{foot_choice}_foot",
-                field_applicable=f"monofilament_{foot_choice}_foot",
-                **applicable_if_opts,
-            )
+                self.applicable_if(
+                    YES,
+                    field=f"examined_{foot_choice}_foot",
+                    field_applicable=target_field,
+                    **applicable_if_opts,
+                )
