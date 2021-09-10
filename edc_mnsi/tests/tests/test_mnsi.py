@@ -67,6 +67,14 @@ class TestCaseMixin(TestCase):
         data = {
             "mnsi_performed": YES,
             "mnsi_not_performed_reason": None,
+        }
+        data.update(self.get_best_case_patient_history_data())
+        data.update(self.get_best_case_physical_assessment_data())
+        return data
+
+    @staticmethod
+    def get_best_case_patient_history_data():
+        return {
             # Part 1: Patient History
             "numb_legs_feet": NO,
             "burning_pain_legs_feet": NO,
@@ -84,6 +92,9 @@ class TestCaseMixin(TestCase):
             "skin_cracks_open_feet": NO,
             "amputation": NO,
         }
+
+    def get_best_case_physical_assessment_data(self):
+        data = {}
         for foot_choice in self.foot_choices:
             data.update(
                 {
@@ -119,7 +130,7 @@ class TestCaseMixin(TestCase):
 
     def get_worst_case_physical_assessment_data(self):
         data = {}
-        for foot_choice in ["left", "right"]:
+        for foot_choice in self.foot_choices:
             data.update(
                 {
                     f"examined_{foot_choice}_foot": YES,
