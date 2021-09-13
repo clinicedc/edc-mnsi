@@ -1,5 +1,5 @@
 from django.db import models
-from edc_constants.choices import YES_NO_NA, YES_NO_NOT_EXAMINED
+from edc_constants.choices import YES_NO_NOT_EXAMINED
 from edc_constants.constants import NOT_APPLICABLE, NOT_EXAMINED
 from edc_model import models as edc_models
 
