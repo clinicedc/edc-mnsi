@@ -8,6 +8,7 @@ from .choices import (
     MONOFILAMENT_CHOICES,
     ULCERATION_CHOICES,
     VIBRATION_PERCEPTION_CHOICES,
+    YES_NA,
 )
 
 
@@ -20,9 +21,9 @@ def foot_exam_model_mixin_factory(
         class Meta:
             abstract = True
 
-    yes_no__na_options = dict(
+    yes_na_options = dict(
         max_length=15,
-        choices=YES_NO_NA,
+        choices=YES_NA,
         default=NOT_APPLICABLE,
     )
     yes_no_not_examined_options = dict(
@@ -50,7 +51,7 @@ def foot_exam_model_mixin_factory(
             help_text=(
                 "If the MNSI assessment was not performed, respond with `not applicable`."
             ),
-            **yes_no__na_options,
+            **yes_na_options,
         ),
         f"normal_appearance_{foot_choice}_foot": models.CharField(
             verbose_name=f"Does {foot_choice.upper()} foot appear normal?",

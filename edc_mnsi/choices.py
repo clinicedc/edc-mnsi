@@ -2,10 +2,12 @@ from edc_constants.constants import (
     ABSENT,
     DECREASED,
     NORMAL,
+    NOT_APPLICABLE,
     NOT_EXAMINED,
     PRESENT,
     PRESENT_WITH_REINFORCEMENT,
     REDUCED,
+    YES,
 )
 
 ANKLE_REFLEX_CHOICES = (
@@ -34,3 +36,5 @@ VIBRATION_PERCEPTION_CHOICES = (
     (ABSENT, "Absent"),
     (NOT_EXAMINED, "Not examined"),
 )
+
+YES_NA = ((YES, YES), (NOT_APPLICABLE, "Not applicable"))

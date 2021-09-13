@@ -59,10 +59,16 @@ class TestCaseMixin(TestCase):
         ).objects.filter(name=None)
 
     @staticmethod
-    def get_nonempty_set():
+    def get_nonempty_set(value="infection"):
         return django_apps.get_model(
             abnormal_foot_appearance_observations_model
-        ).objects.filter(name="infection")
+        ).objects.filter(name=value)
+
+    @staticmethod
+    def get_amputation_plus_other_abnormalities_set():
+        return django_apps.get_model(
+            abnormal_foot_appearance_observations_model
+        ).objects.exclude(name__contains=OTHER)
 
     def get_best_case_answers(self):
         data = {
@@ -343,6 +349,40 @@ class TestMnsiCalculators(TestCaseMixin, TestCase):
                 mnsi_calculator = MnsiCalculator(**responses)
                 self.assertEqual(mnsi_calculator.physical_assessment_score(), 1.0)
 
+    def test_physical_assessment_amputation_with_no_further_examinations_awards_one_point(
+        self,
+    ):
+        for foot_choice in self.foot_choices:
+            for abnormal_obs_set in [
+                self.get_nonempty_set("deformity_amputation"),
+                self.get_amputation_plus_other_abnormalities_set(),
+            ]:
+                with self.subTest(
+                    (
+                        f"Testing '{foot_choice}' amputated with no further "
+                        "examinations is worth 1 point"
+                    ),
+                    foot_choice=foot_choice,
+                    abnormal_obs=abnormal_obs_set,
+                ):
+                    responses = self.get_best_case_answers()
+                    responses.update(
+                        {
+                            # Specify foot examined, abnormal, amputated
+                            f"examined_{foot_choice}_foot": YES,
+                            f"normal_appearance_{foot_choice}_foot": NO,
+                            f"abnormal_obs_{foot_choice}_foot": abnormal_obs_set,
+                            # Skip other physical assessment answers
+                            f"ulceration_{foot_choice}_foot": NOT_EXAMINED,
+                            f"ankle_reflexes_{foot_choice}_foot": NOT_EXAMINED,
+                            f"vibration_perception_{foot_choice}_toe": NOT_EXAMINED,
+                            f"monofilament_{foot_choice}_foot": NOT_EXAMINED,
+                        }
+                    )
+
+                    mnsi_calculator = MnsiCalculator(**responses)
+                    self.assertEqual(mnsi_calculator.physical_assessment_score(), 1.0)
+
     def test_physical_assessment_foot_ulceration_present_awards_one_point(self):
         ulceration_questions = [
             "ulceration_right_foot",
@@ -542,6 +582,34 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
         form.is_valid()
         self.assertEqual(form._errors, {})
 
+    def test_physical_assessment_questions_not_applicable_if_mnsi_not_performed(self):
+        for foot_choice in self.foot_choices:
+            for question_field in [
+                f"normal_appearance_{foot_choice}_foot",
+                f"ulceration_{foot_choice}_foot",
+                f"ankle_reflexes_{foot_choice}_foot",
+                f"vibration_perception_{foot_choice}_toe",
+                f"monofilament_{foot_choice}_foot",
+            ]:
+                # Setup test case
+                cleaned_data = deepcopy(self.get_mnsi_not_performed_answers())
+                # set one field as answered, e.g. != NOT_EXAMINED
+                cleaned_data.update(
+                    {
+                        question_field: self.get_best_case_answers()[question_field],
+                    }
+                )
+
+                # Test
+                with self.subTest(foot_choice=foot_choice, question_field=question_field):
+                    form_validator = self.validate_form_validator(cleaned_data)
+                    self.assertIn(question_field, form_validator._errors)
+                    self.assertIn(
+                        "Invalid. Foot was not examined",
+                        str(form_validator._errors.get(question_field)),
+                    )
+                    self.assertEqual(len(form_validator._errors), 1, form_validator._errors)
+
     def test_valid_worst_case_form_ok(self):
         cleaned_data = deepcopy(self.get_best_case_answers())
         cleaned_data.update(self.get_worst_case_patient_history_data())
@@ -550,7 +618,61 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
         form.is_valid()
         self.assertEqual(form._errors, {})
 
-    def test_physical_assessment_questions_applicable_if_foot_examined(self):
+    def test_foot_amputated_returns_false_if_foot_not_examined(self):
+        for foot_choice in self.foot_choices:
+            with self.subTest(foot_choice=foot_choice):
+                cleaned_data = {f"examined_{foot_choice}_foot": NO}
+                form_validator = self.form_validator_default_form_cls(
+                    cleaned_data=cleaned_data
+                )
+                self.assertFalse(form_validator.foot_amputated(foot_choice))
+
+    def test_foot_amputated_returns_false_if_no_abnormalities_on_foot(self):
+        for foot_choice in self.foot_choices:
+            with self.subTest(foot_choice=foot_choice):
+                cleaned_data = {
+                    f"examined_{foot_choice}_foot": YES,
+                    f"normal_appearance_{foot_choice}_foot": NO,
+                }
+                form_validator = self.form_validator_default_form_cls(
+                    cleaned_data=cleaned_data
+                )
+                self.assertFalse(form_validator.foot_amputated(foot_choice))
+
+    def test_foot_amputated_returns_false_if_abnormality_not_amputated(self):
+        for foot_choice in self.foot_choices:
+            with self.subTest(foot_choice=foot_choice):
+                cleaned_data = {
+                    f"examined_{foot_choice}_foot": YES,
+                    f"normal_appearance_{foot_choice}_foot": YES,
+                    f"abnormal_obs_{foot_choice}_foot": self.get_nonempty_set("infection"),
+                }
+                form_validator = self.form_validator_default_form_cls(
+                    cleaned_data=cleaned_data
+                )
+                self.assertFalse(form_validator.foot_amputated(foot_choice))
+
+    def test_foot_amputated_returns_true_if_foot_amputated(self):
+        for foot_choice in self.foot_choices:
+            for abnormal_obs_set in [
+                self.get_nonempty_set("deformity_amputation"),
+                self.get_amputation_plus_other_abnormalities_set(),
+            ]:
+                with self.subTest(
+                    foot_choice=foot_choice,
+                    abnormal_obs=abnormal_obs_set,
+                ):
+                    cleaned_data = {
+                        f"examined_{foot_choice}_foot": YES,
+                        f"normal_appearance_{foot_choice}_foot": YES,
+                        f"abnormal_obs_{foot_choice}_foot": abnormal_obs_set,
+                    }
+                    form_validator = self.form_validator_default_form_cls(
+                        cleaned_data=cleaned_data
+                    )
+                    self.assertTrue(form_validator.foot_amputated(foot_choice))
+
+    def test_physical_assessment_questions_applicable_if_foot_examined_but_not_amputated(self):
         for foot_choice in self.foot_choices:
             for question_field in [
                 f"ulceration_{foot_choice}_foot",
@@ -572,6 +694,84 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
                         str(form_validator._errors.get(question_field)),
                     )
                     self.assertEqual(len(form_validator._errors), 1, form_validator._errors)
+
+    def test_physical_assessment_questions_applicable_if_foot_abnormality_but_not_amputated(
+        self,
+    ):
+        for foot_choice in self.foot_choices:
+            for question_field in [
+                f"ulceration_{foot_choice}_foot",
+                f"ankle_reflexes_{foot_choice}_foot",
+                f"vibration_perception_{foot_choice}_toe",
+                f"monofilament_{foot_choice}_foot",
+            ]:
+                # Setup test case
+                cleaned_data = self.get_best_case_answers()
+                cleaned_data.update(
+                    {
+                        # Specify foot examined, abnormal, not-amputated
+                        f"examined_{foot_choice}_foot": YES,
+                        f"normal_appearance_{foot_choice}_foot": NO,
+                        f"abnormal_obs_{foot_choice}_foot": self.get_nonempty_set("infection"),
+                    }
+                )
+                cleaned_data.update({question_field: NOT_EXAMINED})
+
+                # Test
+                with self.subTest(foot_choice=foot_choice, question_field=question_field):
+                    form_validator = self.validate_form_validator(cleaned_data)
+                    self.assertIn(question_field, form_validator._errors)
+                    self.assertIn(
+                        "Invalid. Foot was examined",
+                        str(form_validator._errors.get(question_field)),
+                    )
+                    self.assertEqual(len(form_validator._errors), 1, form_validator._errors)
+
+    def test_physical_assessment_questions_not_required_if_foot_amputated(self):
+        for foot_choice in self.foot_choices:
+            cleaned_data = self.get_best_case_answers()
+            cleaned_data.update(
+                {
+                    # Specify foot examined, abnormal, amputated
+                    f"examined_{foot_choice}_foot": YES,
+                    f"normal_appearance_{foot_choice}_foot": NO,
+                    f"abnormal_obs_{foot_choice}_foot": self.get_nonempty_set(
+                        "deformity_amputation"
+                    ),
+                    # Skip other physical assessment answers
+                    f"ulceration_{foot_choice}_foot": NOT_EXAMINED,
+                    f"ankle_reflexes_{foot_choice}_foot": NOT_EXAMINED,
+                    f"vibration_perception_{foot_choice}_toe": NOT_EXAMINED,
+                    f"monofilament_{foot_choice}_foot": NOT_EXAMINED,
+                }
+            )
+
+            with self.subTest(foot_choice=foot_choice):
+                form_validator = self.validate_form_validator(cleaned_data)
+                self.assertEqual(form_validator._errors, {})
+
+    def test_physical_assessment_questions_still_allowed_if_foot_amputated(self):
+        for foot_choice in self.foot_choices:
+            cleaned_data = self.get_best_case_answers()
+            cleaned_data.update(
+                {
+                    # Specify foot examined, abnormal, amputated
+                    f"examined_{foot_choice}_foot": YES,
+                    f"normal_appearance_{foot_choice}_foot": NO,
+                    f"abnormal_obs_{foot_choice}_foot": self.get_nonempty_set(
+                        "deformity_amputation"
+                    ),
+                    # Skip other physical assessment answers
+                    f"ulceration_{foot_choice}_foot": PRESENT,
+                    f"ankle_reflexes_{foot_choice}_foot": PRESENT,
+                    f"vibration_perception_{foot_choice}_toe": PRESENT,
+                    f"monofilament_{foot_choice}_foot": NORMAL,
+                }
+            )
+
+            with self.subTest(foot_choice=foot_choice):
+                form_validator = self.validate_form_validator(cleaned_data)
+                self.assertEqual(form_validator._errors, {})
 
     def test_physical_assessment_questions_not_applicable_if_foot_not_examined(self):
         for foot_choice in self.foot_choices:
