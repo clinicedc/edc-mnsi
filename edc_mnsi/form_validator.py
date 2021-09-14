@@ -34,7 +34,9 @@ class MnsiFormValidator(FormValidator):
         applicable_if_opts = dict(
             not_applicable_value=NOT_EXAMINED,
             applicable_msg="Invalid. Foot was examined",
-            not_applicable_msg="Invalid. Foot was not examined",
+            not_applicable_msg=(
+                "Invalid. Expected `not examined` if MNSI assessment was not performed.",
+            ),
         )
         for foot_choice in ["right", "left"]:
 

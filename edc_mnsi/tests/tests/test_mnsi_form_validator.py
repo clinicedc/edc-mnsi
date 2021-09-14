@@ -49,7 +49,8 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
                     form_validator = self.validate_form_validator(cleaned_data)
                     self.assertIn(question_field, form_validator._errors)
                     self.assertIn(
-                        "Invalid. Foot was not examined",
+                        "Invalid. "
+                        "Expected `not examined` if MNSI assessment was not performed.",
                         str(form_validator._errors.get(question_field)),
                     )
                     self.assertEqual(len(form_validator._errors), 1, form_validator._errors)
