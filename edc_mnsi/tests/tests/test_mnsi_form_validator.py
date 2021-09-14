@@ -227,9 +227,9 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
     def test_abnormal_observations_required_if_foot_appearance_not_normal(self):
         cleaned_data = deepcopy(self.get_best_case_answers())
 
-        for foot in ["right_foot", "left_foot"]:
-            field = f"normal_appearance_{foot}"
-            m2m_field = f"abnormal_obs_{foot}"
+        for foot_choice in self.foot_choices:
+            field = f"normal_appearance_{foot_choice}_foot"
+            m2m_field = f"abnormal_obs_{foot_choice}_foot"
 
             with self.subTest(
                 f"Testing '{m2m_field}' is required if {field}='No'",
@@ -254,9 +254,9 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
             name="infection"
         )
 
-        for foot in ["right_foot", "left_foot"]:
-            field = f"normal_appearance_{foot}"
-            m2m_field = f"abnormal_obs_{foot}"
+        for foot_choice in self.foot_choices:
+            field = f"normal_appearance_{foot_choice}_foot"
+            m2m_field = f"abnormal_obs_{foot_choice}_foot"
 
             with self.subTest(
                 f"Testing '{m2m_field}' accepted if {field}='No'",
@@ -273,9 +273,9 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
             name="infection"
         )
 
-        for foot in ["right_foot", "left_foot"]:
-            field = f"normal_appearance_{foot}"
-            m2m_field = f"abnormal_obs_{foot}"
+        for foot_choice in self.foot_choices:
+            field = f"normal_appearance_{foot_choice}_foot"
+            m2m_field = f"abnormal_obs_{foot_choice}_foot"
 
             with self.subTest(
                 f"Testing '{m2m_field}' accepted if {field}='No'",
@@ -298,9 +298,9 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
         cleaned_data = deepcopy(self.get_best_case_answers())
         other_observation = AbnormalFootAppearanceObservations.objects.filter(name=OTHER)
 
-        for foot in ["right_foot", "left_foot"]:
-            field = f"normal_appearance_{foot}"
-            m2m_field = f"abnormal_obs_{foot}"
+        for foot_choice in self.foot_choices:
+            field = f"normal_appearance_{foot_choice}_foot"
+            m2m_field = f"abnormal_obs_{foot_choice}_foot"
             m2m_field_other = f"{m2m_field}_other"
 
             with self.subTest(
@@ -328,9 +328,9 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
             name="infection"
         )
 
-        for foot in ["right_foot", "left_foot"]:
-            field = f"normal_appearance_{foot}"
-            m2m_field = f"abnormal_obs_{foot}"
+        for foot_choice in self.foot_choices:
+            field = f"normal_appearance_{foot_choice}_foot"
+            m2m_field = f"abnormal_obs_{foot_choice}_foot"
             m2m_field_other = f"{m2m_field}_other"
 
             with self.subTest(
