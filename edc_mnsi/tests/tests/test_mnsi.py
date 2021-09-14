@@ -222,6 +222,19 @@ class TestMnsiCalculators(TestCaseMixin, TestCase):
         self.assertEqual(mnsi_calculator.patient_history_score(), 13)
         self.assertEqual(mnsi_calculator.physical_assessment_score(), 10)
 
+    def test_calculator_instantiated_with_dict_when_mnsi_not_performed(self):
+        responses = self.get_mnsi_not_performed_answers()
+        mnsi_calculator = MnsiCalculator(**responses)
+        self.assertEqual(mnsi_calculator.patient_history_score(), 0)
+        self.assertEqual(mnsi_calculator.physical_assessment_score(), 0)
+
+    def test_calculator_instantiated_with_model_when_mnsi_not_performed(self):
+        responses = self.get_mnsi_not_performed_answers()
+        model = self.get_mnsi_obj(**responses)
+        mnsi_calculator = MnsiCalculator(model)
+        self.assertEqual(mnsi_calculator.patient_history_score(), 0)
+        self.assertEqual(mnsi_calculator.physical_assessment_score(), 0)
+
     def test_missing_required_field_raises_mnsi_patient_history_calculator_error(
         self,
     ):
@@ -259,6 +272,10 @@ class TestMnsiCalculators(TestCaseMixin, TestCase):
         mnsi_calculator = MnsiCalculator(**self.get_best_case_answers())
         self.assertEqual(mnsi_calculator.patient_history_score(), 0)
 
+    def test_patient_history_returns_score_of_zero_when_mnsi_not_performed(self):
+        mnsi_calculator = MnsiCalculator(**self.get_mnsi_not_performed_answers())
+        self.assertEqual(mnsi_calculator.patient_history_score(), 0)
+
     def test_worst_case_patient_history_returns_max_score_of_thirteen(self):
         responses = self.get_best_case_answers()
         responses.update(self.get_worst_case_patient_history_data())
@@ -288,6 +305,10 @@ class TestMnsiCalculators(TestCaseMixin, TestCase):
 
     def test_best_case_physical_assessment_returns_min_score_of_zero(self):
         mnsi_calculator = MnsiCalculator(**self.get_best_case_answers())
+        self.assertEqual(mnsi_calculator.physical_assessment_score(), 0)
+
+    def test_physical_assessment_returns_score_of_zero_when_mnsi_not_performed(self):
+        mnsi_calculator = MnsiCalculator(**self.get_mnsi_not_performed_answers())
         self.assertEqual(mnsi_calculator.physical_assessment_score(), 0)
 
     def test_worst_case_physical_assessment_returns_max_score_of_ten(self):
