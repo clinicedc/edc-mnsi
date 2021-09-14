@@ -1,6 +1,6 @@
 from django.db import models
 from edc_constants.choices import YES_NO_NOT_EXAMINED
-from edc_constants.constants import NOT_APPLICABLE, NOT_EXAMINED
+from edc_constants.constants import NOT_EXAMINED
 from edc_model import models as edc_models
 
 from .choices import (
@@ -8,7 +8,6 @@ from .choices import (
     MONOFILAMENT_CHOICES,
     ULCERATION_CHOICES,
     VIBRATION_PERCEPTION_CHOICES,
-    YES_NA,
 )
 
 
@@ -21,11 +20,6 @@ def foot_exam_model_mixin_factory(
         class Meta:
             abstract = True
 
-    yes_na_options = dict(
-        max_length=15,
-        choices=YES_NA,
-        default=NOT_APPLICABLE,
-    )
     yes_no_not_examined_options = dict(
         max_length=15,
         choices=YES_NO_NOT_EXAMINED,
@@ -46,13 +40,6 @@ def foot_exam_model_mixin_factory(
     )
 
     attrs = {
-        f"examined_{foot_choice}_foot": models.CharField(
-            verbose_name=f"Was the {foot_choice.upper()} foot examined?",
-            help_text=(
-                "If the MNSI assessment was not performed, respond with `not applicable`."
-            ),
-            **yes_na_options,
-        ),
         f"normal_appearance_{foot_choice}_foot": models.CharField(
             verbose_name=f"Does {foot_choice.upper()} foot appear normal?",
             **yes_no_not_examined_options,

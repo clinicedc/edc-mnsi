@@ -28,8 +28,6 @@ class MnsiModelAdminMixin:
         "crf_status": admin.VERTICAL,
         "diabetic_neuropathy": admin.VERTICAL,
         "differentiate_hot_cold_water": admin.VERTICAL,
-        "examined_left_foot": admin.VERTICAL,
-        "examined_right_foot": admin.VERTICAL,
         "feel_weak": admin.VERTICAL,
         "feet_sensitive_touch": admin.VERTICAL,
         "legs_hurt_when_walk": admin.VERTICAL,

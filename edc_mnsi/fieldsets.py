@@ -30,7 +30,6 @@ patient_history_fields = (
 
 def get_physical_assessment_fields(foot_choice):
     return (
-        f"examined_{foot_choice}_foot",
         f"normal_appearance_{foot_choice}_foot",
         f"abnormal_obs_{foot_choice}_foot",
         f"abnormal_obs_{foot_choice}_foot_other",
