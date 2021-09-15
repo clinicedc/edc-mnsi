@@ -24,18 +24,15 @@ def foot_exam_model_mixin_factory(
         max_length=15,
         choices=YES_NO_NOT_EXAMINED,
         default=NOT_EXAMINED,
-        help_text=(
-            "If the MNSI assessment was not performed or this "
-            "foot was not examined, respond with `not examined`."
-        ),
+        help_text="If the MNSI assessment was not performed, respond with `not examined`.",
     )
 
     not_examined_options = dict(
         max_length=35,
         default=NOT_EXAMINED,
         help_text=(
-            "If the MNSI assessment was not performed or this "
-            "foot was not examined, respond with `not examined`."
+            "If the MNSI assessment was not performed, or amputation prevents "
+            "examination, respond with `not examined`."
         ),
     )
 

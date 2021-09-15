@@ -34,6 +34,10 @@ class MnsiModelMixin(
         max_length=15,
         choices=YES_NO,
         default=YES,
+        help_text=(
+            "If completion of patient history or physical assessment not possible, "
+            "respond with `no` and provide reason below."
+        ),
     )
 
     mnsi_not_performed_reason = models.TextField(
