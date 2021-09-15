@@ -33,7 +33,9 @@ class MnsiFormValidator(FormValidator):
     def clean_physical_assessments(self):
         applicable_if_opts = dict(
             not_applicable_value=NOT_EXAMINED,
-            applicable_msg="Invalid. Foot was examined",
+            applicable_msg=(
+                "Invalid. Examination result expected if MNSI assessment was performed."
+            ),
             not_applicable_msg=(
                 "Invalid. Expected `not examined` if MNSI assessment was not performed.",
             ),

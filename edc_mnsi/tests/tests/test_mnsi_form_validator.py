@@ -145,7 +145,8 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
                     form_validator = self.validate_form_validator(cleaned_data)
                     self.assertIn(question_field, form_validator._errors)
                     self.assertIn(
-                        "Invalid. Foot was examined",
+                        "Invalid. "
+                        "Examination result expected if MNSI assessment was performed.",
                         str(form_validator._errors.get(question_field)),
                     )
                     self.assertEqual(len(form_validator._errors), 1, form_validator._errors)
@@ -178,7 +179,8 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
                     form_validator = self.validate_form_validator(cleaned_data)
                     self.assertIn(question_field, form_validator._errors)
                     self.assertIn(
-                        "Invalid. Foot was examined",
+                        "Invalid. "
+                        "Examination result expected if MNSI assessment was performed.",
                         str(form_validator._errors.get(question_field)),
                     )
                     self.assertEqual(len(form_validator._errors), 1, form_validator._errors)
