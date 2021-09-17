@@ -4,6 +4,10 @@ from django.test import TestCase
 from edc_constants.constants import NO, NORMAL, NOT_EXAMINED, OTHER, PRESENT, YES
 from edc_form_validators import FormValidatorTestCaseMixin
 
+from edc_mnsi.calculator import (
+    MnsiPatientHistoryCalculatorError,
+    MnsiPhysicalAssessmentCalculatorError,
+)
 from edc_mnsi.models import AbnormalFootAppearanceObservations
 
 from ..forms import MnsiForm, MnsiFormValidator
@@ -372,3 +376,21 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
                 del cleaned_data[m2m_field]
                 del cleaned_data[m2m_field_other]
                 cleaned_data.update({field: YES})
+
+    def test_missing_required_field_raises_mnsi_patient_history_calculator_error(
+        self,
+    ):
+        cleaned_data = self.get_best_case_answers()
+        cleaned_data.pop("numb_legs_feet")
+
+        with self.assertRaises(MnsiPatientHistoryCalculatorError):
+            self.validate_form_validator(cleaned_data)
+
+    def test_missing_required_field_raises_mnsi_physical_assessment_calculator_error(
+        self,
+    ):
+        cleaned_data = self.get_best_case_answers()
+        cleaned_data.pop("ulceration_left_foot")
+
+        with self.assertRaises(MnsiPhysicalAssessmentCalculatorError):
+            self.validate_form_validator(cleaned_data)

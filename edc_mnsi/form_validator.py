@@ -1,6 +1,7 @@
 from edc_constants.constants import NO, NOT_EXAMINED, OTHER, YES
 from edc_form_validators import FormValidator
 
+from .calculator import MnsiCalculator
 from .fieldsets import patient_history_fields
 
 
@@ -13,6 +14,7 @@ class MnsiFormValidator(FormValidator):
         )
         self.clean_patient_history_fields()
         self.clean_physical_assessments()
+        self.clean_calculation_data()
 
     def clean_patient_history_fields(self):
         for field in patient_history_fields:
@@ -75,3 +77,8 @@ class MnsiFormValidator(FormValidator):
                         field_applicable=target_field,
                         **applicable_if_opts,
                     )
+
+    def clean_calculation_data(self):
+        mnsi_calculator = MnsiCalculator(**self.cleaned_data)
+        mnsi_calculator.patient_history_score()
+        mnsi_calculator.physical_assessment_score()
