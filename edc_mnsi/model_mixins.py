@@ -6,17 +6,12 @@ from edc_constants.constants import NOT_APPLICABLE, YES
 
 from .calculator import MnsiCalculator
 from .factory import foot_exam_model_mixin_factory
-
-abnormal_foot_appearance_observations_model = getattr(
-    settings,
-    "EDC_MNSI_ABNORMAL_FOOT_APPEARANCE_OBSERVATIONS_MODEL",
-    "edc_mnsi.abnormalfootappearanceobservations",
-)
+from .utils import get_abnormal_foot_appearance_obs_model_name
 
 
 class MnsiModelMixin(
-    foot_exam_model_mixin_factory("right", abnormal_foot_appearance_observations_model),
-    foot_exam_model_mixin_factory("left", abnormal_foot_appearance_observations_model),
+    foot_exam_model_mixin_factory("right", get_abnormal_foot_appearance_obs_model_name()),
+    foot_exam_model_mixin_factory("left", get_abnormal_foot_appearance_obs_model_name()),
     models.Model,
 ):
 

@@ -1,7 +1,9 @@
 from edc_constants.constants import OTHER
 
+from .utils import get_abnormal_foot_appearance_obs_model_name
+
 list_data = {
-    "edc_mnsi.abnormalfootappearanceobservations": [
+    get_abnormal_foot_appearance_obs_model_name(): [
         ("callous_formation", "Callous formation"),
         ("deformity_amputation", "Deformity – amputation"),
         ("deformity_flat_feet", "Deformity – flat feet"),

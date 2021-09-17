@@ -12,9 +12,8 @@ from edc_constants.constants import (
 )
 from edc_list_data import site_list_data
 
-from edc_mnsi import list_data
-from edc_mnsi.model_mixins import abnormal_foot_appearance_observations_model
-
+from ... import list_data
+from ...utils import get_abnormal_foot_appearance_obs_model_cls
 from ..models import Mnsi
 
 
@@ -41,15 +40,11 @@ class TestCaseMixin(TestCase):
 
     @staticmethod
     def get_empty_abnormal_obs_set():
-        return django_apps.get_model(
-            abnormal_foot_appearance_observations_model
-        ).objects.filter(name=None)
+        return get_abnormal_foot_appearance_obs_model_cls().objects.filter(name=None)
 
     @staticmethod
     def get_nonempty_abnormal_obs_set(value="infection"):
-        return django_apps.get_model(
-            abnormal_foot_appearance_observations_model
-        ).objects.filter(name=value)
+        return get_abnormal_foot_appearance_obs_model_cls().objects.filter(name=value)
 
     @property
     def amputated_abnormal_obs_sets(self):
@@ -60,9 +55,9 @@ class TestCaseMixin(TestCase):
 
     @staticmethod
     def get_amputation_plus_other_abnormalities_set():
-        return django_apps.get_model(
-            abnormal_foot_appearance_observations_model
-        ).objects.exclude(name__contains=OTHER)
+        return get_abnormal_foot_appearance_obs_model_cls().objects.exclude(
+            name__contains=OTHER
+        )
 
     def get_best_case_answers(self):
         data = {
