@@ -81,22 +81,21 @@ class MnsiCalculator:
         score = 0.0
         try:
             for foot_choice in ["left", "right"]:
-                if self.responses[f"examined_{foot_choice}_foot"] == YES:
-                    score += self._get_appearance_points(
-                        self.responses[f"normal_appearance_{foot_choice}_foot"]
-                    )
-                    score += self._get_ulceration_points(
-                        self.responses[f"ulceration_{foot_choice}_foot"]
-                    )
-                    score += self._get_ankle_reflex_points(
-                        self.responses[f"ankle_reflexes_{foot_choice}_foot"]
-                    )
-                    score += self._get_vibration_perception_points(
-                        self.responses[f"vibration_perception_{foot_choice}_toe"]
-                    )
-                    score += self._get_monofilament_points(
-                        self.responses[f"monofilament_{foot_choice}_foot"]
-                    )
+                score += self._get_appearance_points(
+                    self.responses[f"normal_appearance_{foot_choice}_foot"]
+                )
+                score += self._get_ulceration_points(
+                    self.responses[f"ulceration_{foot_choice}_foot"]
+                )
+                score += self._get_ankle_reflex_points(
+                    self.responses[f"ankle_reflexes_{foot_choice}_foot"]
+                )
+                score += self._get_vibration_perception_points(
+                    self.responses[f"vibration_perception_{foot_choice}_toe"]
+                )
+                score += self._get_monofilament_points(
+                    self.responses[f"monofilament_{foot_choice}_foot"]
+                )
         except KeyError as exc:
             raise MnsiPhysicalAssessmentCalculatorError(
                 f"Can't calculate physical assessment score for MNSI. "
