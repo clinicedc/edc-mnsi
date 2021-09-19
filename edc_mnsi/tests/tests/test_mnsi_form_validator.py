@@ -8,9 +8,10 @@ from edc_mnsi.calculator import (
     MnsiPatientHistoryCalculatorError,
     MnsiPhysicalAssessmentCalculatorError,
 )
+from edc_mnsi.form_validator import MnsiFormValidator
+from edc_mnsi.forms import MnsiForm
 from edc_mnsi.models import AbnormalFootAppearanceObservations
 
-from ..forms import MnsiForm, MnsiFormValidator
 from .mixins import TestCaseMixin
 
 

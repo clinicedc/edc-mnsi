@@ -1,14 +1,21 @@
-from edc_model import models as edc_models
+from django.db import models
+from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
+from edc_model.models import BaseUuidModel
+from edc_visit_schedule.model_mixins import VisitCodeFieldsModelMixin
 
-from edc_mnsi.model_mixins import MnsiModelMixin
+
+class Appointment(
+    NonUniqueSubjectIdentifierFieldMixin, VisitCodeFieldsModelMixin, BaseUuidModel
+):
+    class Meta(BaseUuidModel.Meta):
+        pass
 
 
-class Mnsi(
-    MnsiModelMixin,
-    edc_models.BaseUuidModel,
+class SubjectVisit(
+    NonUniqueSubjectIdentifierFieldMixin, VisitCodeFieldsModelMixin, BaseUuidModel
 ):
 
-    history = edc_models.HistoricalRecords()
+    appointment = models.ForeignKey(Appointment, on_delete=models.PROTECT, related_name="+")
 
-    class Meta(MnsiModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+    class Meta(BaseUuidModel.Meta):
         pass

@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from edc_constants.choices import YES_NO, YES_NO_NA
@@ -6,12 +5,11 @@ from edc_constants.constants import NOT_APPLICABLE, YES
 
 from .calculator import MnsiCalculator
 from .factory import foot_exam_model_mixin_factory
-from .utils import get_abnormal_foot_appearance_obs_model_name
 
 
 class MnsiModelMixin(
-    foot_exam_model_mixin_factory("right", get_abnormal_foot_appearance_obs_model_name()),
-    foot_exam_model_mixin_factory("left", get_abnormal_foot_appearance_obs_model_name()),
+    foot_exam_model_mixin_factory("right"),
+    foot_exam_model_mixin_factory("left"),
     models.Model,
 ):
 
