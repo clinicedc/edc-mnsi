@@ -7,5 +7,8 @@ class Mnsi(
     MnsiModelMixin,
     edc_models.BaseUuidModel,
 ):
+
+    history = edc_models.HistoricalRecords()
+
     class Meta(MnsiModelMixin.Meta, edc_models.BaseUuidModel.Meta):
         pass
