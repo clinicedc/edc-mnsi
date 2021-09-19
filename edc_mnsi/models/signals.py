@@ -1,12 +1,5 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from edc_list_data.model_mixins import ListModelMixin
-
-
-class AbnormalFootAppearanceObservations(ListModelMixin):
-    class Meta(ListModelMixin.Meta):
-        verbose_name = "Abnormal Foot Appearance Observations"
-        verbose_name_plural = "Abnormal Foot Appearance Observations"
 
 
 @receiver(post_save, weak=False, dispatch_uid="calculate_mnsi_score_on_post_save")

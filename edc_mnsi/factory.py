@@ -11,9 +11,7 @@ from .choices import (
 )
 
 
-def foot_exam_model_mixin_factory(
-    foot_choice, abnormal_foot_appearance_observations_model=None
-):
+def foot_exam_model_mixin_factory(foot_choice):
     """Returns an abstract model mixin"""
 
     class AbstractModel(models.Model):
@@ -42,8 +40,8 @@ def foot_exam_model_mixin_factory(
             **yes_no_not_examined_options,
         ),
         f"abnormal_obs_{foot_choice}_foot": models.ManyToManyField(
-            abnormal_foot_appearance_observations_model,
-            related_name=f"abnormal_obs_{foot_choice}_foot",
+            "edc_mnsi.abnormalfootappearanceobservations",
+            related_name="+",
             verbose_name=f"If NO, check all that apply to {foot_choice.upper()} foot?",
             blank=True,
         ),

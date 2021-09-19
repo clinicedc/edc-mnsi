@@ -9,7 +9,8 @@ from edc_constants.constants import (
     YES,
 )
 
-from ..models import Mnsi
+from edc_mnsi.models import Mnsi
+
 from .mixins import TestCaseMixin
 
 
