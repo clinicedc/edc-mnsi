@@ -104,7 +104,11 @@ Note: In your custom ``admin`` you should unregister the default ``admin`` class
         fieldsets = get_fieldsets()
         radio_fields = radio_fields
 
+|django|
 
+.. |django| image:: https://www.djangoproject.com/m/img/badges/djangomade124x25.gif
+   :target: http://www.djangoproject.com/
+   :alt: Made with Django
 
 .. |pypi| image:: https://img.shields.io/pypi/v/edc-mnsi.svg
     :target: https://pypi.python.org/pypi/edc-mnsi
