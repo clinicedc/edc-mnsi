@@ -16,57 +16,91 @@ See also:
 * https://github.com/clinicedc/edc
 * https://github.com/meta-trial/meta-edc
 
-Sample usage:
+``edc_mnsi`` has an Mnsi model. If the default model does not meet your needs,
+you can use the Mnsi model mixin and declare an Mnsi model in your app.
 
 .. code-block:: python
 
     # models.py
     from edc_mnsi.model_mixins import MnsiModelMixin
     from edc_model import models as edc_models
+    # a custom mixin
+    from ..model_mixins import CrfModelMixin
+
 
     class Mnsi(
         MnsiModelMixin,
+        CrfModelMixin,
         edc_models.BaseUuidModel,
     ):
-        class Meta(MnsiModelMixin.Meta, edc_models.BaseUuidModel.Meta):
-            verbose_name = "Michigan Neuropathy Screening Instrument (MNSI)"
-            verbose_name_plural = "Michigan Neuropathy Screening Instrument (MNSI)"
+        class Meta(MnsiModelMixin.Meta, CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+            pass
 
-.. code-block:: python
+If using a custom ``Mnsi`` model add the following to ``settings`` ::
 
-    # forms.py
-    from django import forms
-    from edc_form_validators import FormValidatorMixin
-    from edc_mnsi.form_validator import MnsiFormValidator
+    EDC_MNSI_MODEL = "my_app.mnsi"
 
-    from .models import Mnsi
+Note: ``settings.EDC_MNSI_MODEL`` is needed so ``edc_mnsi.auths.py`` knows where the model is.
+This is applicable if you are using ``edc_auth``.
 
-
-    class MnsiForm(FormValidatorMixin, forms.ModelForm):
-
-        form_validator_cls = MnsiFormValidator
-
-        class Meta:
-            model = Mnsi
-            fields = "__all__"
+In your custom ``admin`` you should unregister the default ``admin`` class before registering your custom ``admin`` class.
 
 .. code-block:: python
 
     # admin.py
-    from edc_mnsi.admin import MnsiModelAdminMixin
-    from edc_mnsi.fieldsets import get_fieldsets
+    from django.contrib import admin
+    from django_audit_fields import audit_fieldset_tuple
+    from edc_crf.admin import crf_status_fieldset_tuple
+    from edc_mnsi.admin_site import edc_mnsi_admin
+    from edc_mnsi.fieldsets import calculated_values_fieldset
+    from edc_mnsi.fieldsets import get_fieldsets as get_mnsi_fieldsets
+    from edc_mnsi.model_admin_mixin import MnsiModelAdminMixin, radio_fields
+    from edc_mnsi.models import Mnsi as DefaultMnsi
+    from edc_model_admin import SimpleHistoryAdmin
 
-    from .forms import MnsiForm
+    # your app's admin site
+    from ..admin_site import my_app_admin
+    # your custom form
+    from ..forms import MnsiForm
+    # your custom model
+    from ..models import Mnsi
+    # a custom mixin
+    from .modeladmin import CrfModelAdmin
 
-    @admin.register(Mnsi, site=admin)
+    # customize the fieldsets as needed
+    def get_fieldsets():
+        fieldset = (
+            None,
+            {
+                "fields": (
+                    "subject_visit",
+                    "report_datetime",
+                    "mnsi_performed",
+                    "mnsi_not_performed_reason",
+                )
+            },
+        )
+
+        fieldsets = (fieldset,) + get_mnsi_fieldsets()
+        fieldsets += (crf_status_fieldset_tuple,)
+        fieldsets += (calculated_values_fieldset,)
+        fieldsets += (audit_fieldset_tuple,)
+        return fieldsets
+
+    # customize radio_fields
+    radio_fields.update(crf_status=admin.VERTICAL)
+    # unregister the default model
+    edc_mnsi_admin.unregister(DefaultMnsi)
+
+    @admin.register(Mnsi, site=meta_subject_admin)
     class MnsiAdmin(
         MnsiModelAdminMixin,
+        CrfModelAdmin,
         SimpleHistoryAdmin,
     ):
-
         form = MnsiForm
-
         fieldsets = get_fieldsets()
+        radio_fields = radio_fields
 
 
 
