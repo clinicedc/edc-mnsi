@@ -16,8 +16,8 @@ See also:
 * https://github.com/clinicedc/edc
 * https://github.com/meta-trial/meta-edc
 
-``edc_mnsi`` has an Mnsi model. If the default model does not meet your needs,
-you can use the Mnsi model mixin and declare an Mnsi model in your app.
+``edc_mnsi`` has an ``Mnsi`` model. If the default model does not meet your needs,
+you can use the ``Mnsi`` model mixin, ``MnsiModelMixin``, and declare a custom ``Mnsi`` model in your app.
 
 .. code-block:: python
 
@@ -36,14 +36,16 @@ you can use the Mnsi model mixin and declare an Mnsi model in your app.
         class Meta(MnsiModelMixin.Meta, CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
             pass
 
-If using a custom ``Mnsi`` model add the following to ``settings`` ::
+Add the following to ``settings`` if using a custom ``Mnsi`` model::
 
     EDC_MNSI_MODEL = "my_app.mnsi"
 
-Note: ``settings.EDC_MNSI_MODEL`` is needed so ``edc_mnsi.auths.py`` knows where the model is.
+Note: ``settings.EDC_MNSI_MODEL`` is needed by ``edc_mnsi.auths.py`` to find the ``Mnsi`` model.
 This is applicable if you are using ``edc_auth``.
 
-In your custom ``admin`` you should unregister the default ``admin`` class before registering your custom ``admin`` class.
+A custom admin class will be needed for your custom ``Mnsi`` model. Here is an example of a custom ``admin`` class that refers to fields added to the custom ``Mnsi`` model and adds a custom ``modeladmin`` mixin.
+
+Note: In your custom ``admin`` you should unregister the default ``admin`` class before registering your custom ``admin`` class.
 
 .. code-block:: python
 
