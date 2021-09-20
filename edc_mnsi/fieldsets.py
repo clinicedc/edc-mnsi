@@ -30,7 +30,6 @@ patient_history_fields = (
 
 def get_physical_assessment_fields(foot_choice):
     return (
-        f"examined_{foot_choice}_foot",
         f"normal_appearance_{foot_choice}_foot",
         f"abnormal_obs_{foot_choice}_foot",
         f"abnormal_obs_{foot_choice}_foot_other",
@@ -47,7 +46,7 @@ def get_fieldsets():
             "Part 1: Patient History",
             {
                 "description": (
-                    "To be completed by the patient. If the assessment "
+                    "To be completed by the patient. If the MNSI assessment "
                     "was not performed, the response is `not applicable`."
                 ),
                 "fields": patient_history_fields,

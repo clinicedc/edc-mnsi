@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from edc_constants.choices import YES_NO, YES_NO_NA
@@ -7,16 +6,10 @@ from edc_constants.constants import NOT_APPLICABLE, YES
 from .calculator import MnsiCalculator
 from .factory import foot_exam_model_mixin_factory
 
-abnormal_foot_appearance_observations_model = getattr(
-    settings,
-    "EDC_MNSI_ABNORMAL_FOOT_APPEARANCE_OBSERVATIONS_MODEL",
-    "edc_mnsi.abnormalfootappearanceobservations",
-)
-
 
 class MnsiModelMixin(
-    foot_exam_model_mixin_factory("right", abnormal_foot_appearance_observations_model),
-    foot_exam_model_mixin_factory("left", abnormal_foot_appearance_observations_model),
+    foot_exam_model_mixin_factory("right"),
+    foot_exam_model_mixin_factory("left"),
     models.Model,
 ):
 
@@ -34,6 +27,10 @@ class MnsiModelMixin(
         max_length=15,
         choices=YES_NO,
         default=YES,
+        help_text=(
+            "If completion of patient history or physical assessment not possible, "
+            "respond with `no` and provide reason below."
+        ),
     )
 
     mnsi_not_performed_reason = models.TextField(
@@ -173,6 +170,12 @@ class MnsiModelMixin(
         mnsi_calculator = MnsiCalculator(model_obj=self)
         self.calculated_patient_history_score = mnsi_calculator.patient_history_score()
         self.calculated_physical_assessment_score = mnsi_calculator.physical_assessment_score()
+        self.save(
+            update_fields=[
+                "calculated_patient_history_score",
+                "calculated_physical_assessment_score",
+            ]
+        )
 
     class Meta:
         abstract = True
