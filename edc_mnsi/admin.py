@@ -7,7 +7,6 @@ from edc_mnsi.fieldsets import calculated_values_fieldset
 from edc_mnsi.fieldsets import get_fieldsets as get_mnsi_fieldsets
 from edc_mnsi.model_admin_mixin import MnsiModelAdminMixin
 from edc_mnsi.models import AbnormalFootAppearanceObservations
-from edc_mnsi.utils import get_mnsi_model_name
 
 from .admin_site import edc_mnsi_admin
 from .forms import MnsiForm

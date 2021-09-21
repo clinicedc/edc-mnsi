@@ -9,6 +9,7 @@ from .choices import (
     ULCERATION_CHOICES,
     VIBRATION_PERCEPTION_CHOICES,
 )
+from .models import AbnormalFootAppearanceObservations
 
 
 def foot_exam_model_mixin_factory(foot_choice):
@@ -40,7 +41,8 @@ def foot_exam_model_mixin_factory(foot_choice):
             **yes_no_not_examined_options,
         ),
         f"abnormal_obs_{foot_choice}_foot": models.ManyToManyField(
-            "edc_mnsi.abnormalfootappearanceobservations",
+            # "edc_mnsi.abnormalfootappearanceobservations",
+            AbnormalFootAppearanceObservations,
             related_name="+",
             verbose_name=f"If NO, check all that apply to {foot_choice.upper()} foot?",
             blank=True,

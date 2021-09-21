@@ -6,7 +6,6 @@ from os.path import abspath, dirname, join
 import django
 from django.conf import settings
 from django.test.runner import DiscoverRunner
-from edc_constants.constants import CHOL, DM, HIV, HTN
 from edc_test_utils import DefaultTestSettings
 
 base_dir = dirname(abspath(__file__))
