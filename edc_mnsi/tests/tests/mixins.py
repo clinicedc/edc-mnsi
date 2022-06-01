@@ -3,7 +3,6 @@ from copy import deepcopy
 from django.test import TestCase
 from edc_constants.constants import (
     ABSENT,
-    INCOMPLETE,
     NO,
     NORMAL,
     NOT_APPLICABLE,
