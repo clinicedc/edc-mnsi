@@ -30,6 +30,9 @@ jobs:
         sudo apt-get install libcups2-dev wamerican
 
     - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+        fetch-depth: 0
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
