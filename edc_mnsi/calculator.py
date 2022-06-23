@@ -32,7 +32,7 @@ class MnsiCalculator:
         return f"{self.__class__.__name__}(responses={self.responses})"
 
     def patient_history_score(self) -> int:
-        """Returns MSNI score based on patient history questionnaire.
+        """Returns MNSI score based on patient history questionnaire.
 
         Scoring based on:
             https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3641573/#S6title
