@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django_audit_fields import audit_fieldset_tuple
 from edc_list_data.admin import ListModelAdminMixin
-from edc_model_admin import SimpleHistoryAdmin
+from edc_model_admin.history import SimpleHistoryAdmin
 
 from edc_mnsi.fieldsets import calculated_values_fieldset
 from edc_mnsi.fieldsets import get_fieldsets as get_mnsi_fieldsets

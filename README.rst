@@ -58,7 +58,7 @@ Note: In your custom ``admin`` you should unregister the default ``admin`` class
     from edc_mnsi.fieldsets import get_fieldsets as get_mnsi_fieldsets
     from edc_mnsi.model_admin_mixin import MnsiModelAdminMixin, radio_fields
     from edc_mnsi.models import Mnsi as DefaultMnsi
-    from edc_model_admin import SimpleHistoryAdmin
+    from edc_model_admin.history import SimpleHistoryAdmin
 
     # your app's admin site
     from ..admin_site import my_app_admin
