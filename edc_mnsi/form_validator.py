@@ -1,11 +1,11 @@
 from edc_constants.constants import NO, NOT_EXAMINED, OTHER, YES
-from edc_form_validators import FormValidator
+from edc_crf.crf_form_validator import CrfFormValidator
 
 from .calculator import MnsiCalculator
 from .fieldsets import patient_history_fields
 
 
-class MnsiFormValidator(FormValidator):
+class MnsiFormValidatorMixin:
     def clean(self):
         self.required_if(
             NO,
@@ -82,3 +82,7 @@ class MnsiFormValidator(FormValidator):
         mnsi_calculator = MnsiCalculator(**self.cleaned_data)
         mnsi_calculator.patient_history_score()
         mnsi_calculator.physical_assessment_score()
+
+
+class MnsiFormValidator(MnsiFormValidatorMixin, CrfFormValidator):
+    pass
