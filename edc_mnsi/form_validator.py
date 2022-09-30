@@ -16,7 +16,7 @@ class MnsiFormValidatorMixin:
         self.clean_physical_assessments()
         self.clean_calculation_data()
 
-    def clean_patient_history_fields(self):
+    def clean_patient_history_fields(self) -> None:
         for field in patient_history_fields:
             self.applicable_if(
                 YES,
@@ -32,7 +32,7 @@ class MnsiFormValidatorMixin:
             return qs.filter(name="deformity_amputation").exists()
         return False
 
-    def clean_physical_assessments(self):
+    def clean_physical_assessments(self) -> None:
         applicable_if_opts = dict(
             not_applicable_value=NOT_EXAMINED,
             applicable_msg=(
@@ -78,7 +78,7 @@ class MnsiFormValidatorMixin:
                         **applicable_if_opts,
                     )
 
-    def clean_calculation_data(self):
+    def clean_calculation_data(self) -> None:
         mnsi_calculator = MnsiCalculator(**self.cleaned_data)
         mnsi_calculator.patient_history_score()
         mnsi_calculator.physical_assessment_score()

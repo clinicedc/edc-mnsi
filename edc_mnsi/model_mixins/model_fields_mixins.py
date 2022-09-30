@@ -3,24 +3,20 @@ from django.db import models
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE, YES
 
-from .calculator import MnsiCalculator
-from .factory import foot_exam_model_mixin_factory
+from ..factory import foot_exam_model_mixin_factory
 
 
-class MnsiModelMixin(
-    foot_exam_model_mixin_factory("right"),
-    foot_exam_model_mixin_factory("left"),
-    models.Model,
-):
+class MnsiRightFootFieldsModelMixin(foot_exam_model_mixin_factory("right"), models.Model):
+    class Meta:
+        abstract = True
 
-    """Neuropathy screening tool.
 
-    Uses Michigan Neuropathy Screening Instrument (MNSI), see:
-        https://pubmed.ncbi.nlm.nih.gov/7821168/
-        https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3641573/ (omits monofilament testing)
-        https://medicine.umich.edu/sites/default/files/downloads/MNSI_howto.pdf
+class MnsiLeftFootFieldsModelMixin(foot_exam_model_mixin_factory("left"), models.Model):
+    class Meta:
+        abstract = True
 
-    """
+
+class MnsiFieldsModelMixin(models.Model):
 
     mnsi_performed = models.CharField(
         verbose_name="Is the MNSI assessment being performed?",
@@ -162,22 +158,5 @@ class MnsiModelMixin(
         blank=True,
     )
 
-    def update_mnsi_calculated_fields(self) -> None:
-        """Calculates the MNSI scores and updates fields.
-
-        Called in a signal.
-        """
-        mnsi_calculator = MnsiCalculator(model_obj=self)
-        self.calculated_patient_history_score = mnsi_calculator.patient_history_score()
-        self.calculated_physical_assessment_score = mnsi_calculator.physical_assessment_score()
-        self.save(
-            update_fields=[
-                "calculated_patient_history_score",
-                "calculated_physical_assessment_score",
-            ]
-        )
-
     class Meta:
         abstract = True
-        verbose_name = "Michigan Neuropathy Screening Instrument (MNSI)"
-        verbose_name_plural = "Michigan Neuropathy Screening Instrument (MNSI)"
