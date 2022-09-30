@@ -1,4 +1,7 @@
-"""Michigan Neuropathy Screening Instrument (MNSI) calculators."""
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from edc_constants.constants import (
     ABSENT,
     DECREASED,
@@ -8,6 +11,9 @@ from edc_constants.constants import (
     REDUCED,
     YES,
 )
+
+if TYPE_CHECKING:
+    from edc_mnsi.model_mixins import MnsiModelMixin
 
 
 class MnsiPatientHistoryCalculatorError(Exception):
@@ -19,16 +25,18 @@ class MnsiPhysicalAssessmentCalculatorError(Exception):
 
 
 class MnsiCalculator:
-    def __init__(self, model_obj=None, **kwargs):
+    """Michigan Neuropathy Screening Instrument (MNSI) calculators."""
+
+    def __init__(self, model_obj: MnsiModelMixin | None = None, **kwargs):
         if model_obj:
             self.responses = model_obj.__dict__
         else:
             self.responses = kwargs
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.__class__.__name__}(responses={self.responses})"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.__class__.__name__}(responses={self.responses})"
 
     def patient_history_score(self) -> int:

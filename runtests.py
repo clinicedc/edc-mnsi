@@ -18,7 +18,7 @@ DEFAULT_SETTINGS = DefaultTestSettings(
     ETC_DIR=join(base_dir, app_name, "tests", "etc"),
     EDC_AUTH_SKIP_SITE_AUTHS=True,
     EDC_AUTH_SKIP_AUTH_UPDATER=True,
-    SUBJECT_VISIT_MODEL="mnsi_sample_app.subjectvisit",
+    # SUBJECT_VISIT_MODEL="mnsi_sample_app.subjectvisit",
     INSTALLED_APPS=[
         "django.contrib.admin",
         "django.contrib.auth",
@@ -31,6 +31,7 @@ DEFAULT_SETTINGS = DefaultTestSettings(
         "django_revision.apps.AppConfig",
         "multisite",
         "edc_appointment.apps.AppConfig",
+        "edc_action_item.apps.AppConfig",
         "edc_auth.apps.AppConfig",
         "edc_crf.apps.AppConfig",
         "edc_device.apps.AppConfig",

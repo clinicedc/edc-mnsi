@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-from django.test import TestCase
+from django.test import TestCase, tag
 from edc_constants.constants import NO, NORMAL, NOT_EXAMINED, OTHER, PRESENT, YES
 from edc_form_validators import FormValidatorTestCaseMixin
 
@@ -8,10 +8,9 @@ from edc_mnsi.calculator import (
     MnsiPatientHistoryCalculatorError,
     MnsiPhysicalAssessmentCalculatorError,
 )
-from edc_mnsi.form_validator import MnsiFormValidator
-from edc_mnsi.forms import MnsiForm
-from edc_mnsi.models import AbnormalFootAppearanceObservations
+from edc_mnsi.models import AbnormalFootAppearanceObservations, Mnsi
 
+from ..forms import MnsiForm, MnsiFormValidator
 from .mixins import TestCaseMixin
 
 
@@ -60,6 +59,7 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
                     )
                     self.assertEqual(len(form_validator._errors), 1, form_validator._errors)
 
+    @tag("1")
     def test_valid_worst_case_form_ok(self):
         cleaned_data = deepcopy(self.get_best_case_answers())
         cleaned_data.update(self.get_worst_case_patient_history_data())
@@ -80,7 +80,7 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
                         ),
                     }
                 )
-                form_validator = self.form_validator_cls(cleaned_data=cleaned_data)
+                form_validator = self.form_validator_cls(cleaned_data=cleaned_data, model=Mnsi)
                 self.assertFalse(form_validator.foot_amputated(foot_choice))
 
     def test_foot_amputated_returns_false_if_no_abnormalities_on_foot(self):
@@ -93,7 +93,7 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
                         f"abnormal_obs_{foot_choice}_foot": self.get_empty_abnormal_obs_set(),
                     }
                 )
-                form_validator = self.form_validator_cls(cleaned_data=cleaned_data)
+                form_validator = self.form_validator_cls(cleaned_data=cleaned_data, model=Mnsi)
                 self.assertFalse(form_validator.foot_amputated(foot_choice))
 
     def test_foot_amputated_returns_false_if_abnormality_not_amputated(self):
@@ -108,7 +108,7 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
                         ),
                     }
                 )
-                form_validator = self.form_validator_cls(cleaned_data=cleaned_data)
+                form_validator = self.form_validator_cls(cleaned_data=cleaned_data, model=Mnsi)
                 self.assertFalse(form_validator.foot_amputated(foot_choice))
 
     def test_foot_amputated_returns_true_if_foot_amputated(self):
@@ -122,7 +122,9 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
                         f"normal_appearance_{foot_choice}_foot": NO,
                         f"abnormal_obs_{foot_choice}_foot": amputated_obs_set,
                     }
-                    form_validator = self.form_validator_cls(cleaned_data=cleaned_data)
+                    form_validator = self.form_validator_cls(
+                        cleaned_data=cleaned_data, model=Mnsi
+                    )
                     self.assertTrue(form_validator.foot_amputated(foot_choice))
 
     def test_physical_assessment_questions_applicable_if_foot_not_amputated(self):
@@ -349,7 +351,7 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
                 )
                 self.assertEqual(len(form_validator._errors), 1, form_validator._errors)
 
-                # Try with abnormal foot appearance, and non-'other' observation
+                # Try with abnormal foot appearance, and non-"other" observation
                 cleaned_data.update(
                     {
                         field: NO,
