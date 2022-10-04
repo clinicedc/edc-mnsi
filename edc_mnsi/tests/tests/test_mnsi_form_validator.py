@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-from django.test import TestCase, tag
+from django.test import TestCase
 from edc_constants.constants import NO, NORMAL, NOT_EXAMINED, OTHER, PRESENT, YES
 from edc_form_validators import FormValidatorTestCaseMixin
 
@@ -59,7 +59,6 @@ class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase)
                     )
                     self.assertEqual(len(form_validator._errors), 1, form_validator._errors)
 
-    @tag("1")
     def test_valid_worst_case_form_ok(self):
         cleaned_data = deepcopy(self.get_best_case_answers())
         cleaned_data.update(self.get_worst_case_patient_history_data())
