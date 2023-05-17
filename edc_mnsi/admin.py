@@ -42,7 +42,6 @@ class MnsiAdmin(
     MnsiModelAdminMixin,
     SimpleHistoryAdmin,
 ):
-
     form = MnsiForm
 
     fieldsets = get_fieldsets()

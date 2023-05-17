@@ -15,7 +15,6 @@ from .mixins import TestCaseMixin
 
 
 class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase):
-
     form_validator_cls = MnsiFormValidator
 
     def test_valid_best_case_form_ok(self):

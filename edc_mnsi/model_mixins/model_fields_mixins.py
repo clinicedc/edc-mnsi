@@ -17,7 +17,6 @@ class MnsiLeftFootFieldsModelMixin(foot_exam_model_mixin_factory("left"), models
 
 
 class MnsiFieldsModelMixin(models.Model):
-
     mnsi_performed = models.CharField(
         verbose_name="Is the MNSI assessment being performed?",
         max_length=15,

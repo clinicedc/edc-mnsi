@@ -13,7 +13,6 @@ class Mnsi(
     SiteModelMixin,
     BaseUuidModel,
 ):
-
     report_datetime = models.DateTimeField(default=get_utcnow)
 
     on_site = CurrentSiteManager()
