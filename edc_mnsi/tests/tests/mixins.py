@@ -19,7 +19,6 @@ from edc_mnsi.models import AbnormalFootAppearanceObservations, Mnsi
 
 
 class TestCaseMixin(TestCase):
-
     foot_choices = ["right", "left"]
 
     @classmethod

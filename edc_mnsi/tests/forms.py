@@ -11,7 +11,6 @@ class MnsiFormValidator(MnsiFormValidatorMixin, FormValidator):
 
 
 class MnsiForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
-
     form_validator_cls = MnsiFormValidator
 
     class Meta:

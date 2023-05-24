@@ -33,7 +33,6 @@ radio_fields = {
 
 
 class MnsiModelAdminMixin:
-
     form = None
 
     fieldsets = get_fieldsets()

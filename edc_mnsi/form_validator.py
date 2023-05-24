@@ -43,7 +43,6 @@ class MnsiFormValidatorMixin:
             ),
         )
         for foot_choice in ["right", "left"]:
-
             self.applicable_if(
                 YES,
                 field="mnsi_performed",
@@ -69,7 +68,6 @@ class MnsiFormValidatorMixin:
                 f"vibration_perception_{foot_choice}_toe",
                 f"monofilament_{foot_choice}_foot",
             ]:
-
                 if not self.foot_amputated(foot_choice):
                     self.applicable_if(
                         YES,

@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("edc_mnsi", "0002_historicalmnsi_mnsi"),
     ]
