@@ -1,5 +1,7 @@
 from copy import deepcopy
 
+from django.conf import settings
+from django.contrib.sites.models import Site
 from django.test import TestCase
 from edc_constants.constants import (
     ABSENT,
@@ -30,7 +32,9 @@ class TestCaseMixin(TestCase):
     def setUp(self):
         self.subject_identifier = "1234"
         self.data = dict(
-            subject_identifier=self.subject_identifier, report_datetime=get_utcnow()
+            subject_identifier=self.subject_identifier,
+            report_datetime=get_utcnow(),
+            site=Site.objects.get(id=settings.SITE_ID),
         )
 
     def get_mnsi_obj(
