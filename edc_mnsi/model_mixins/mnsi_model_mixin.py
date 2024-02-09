@@ -15,7 +15,6 @@ class MnsiModelMixin(
     MnsiMethodsModelMixin,
     models.Model,
 ):
-
     """Neuropathy screening tool.
 
     Uses Michigan Neuropathy Screening Instrument (MNSI), see:
