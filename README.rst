@@ -113,8 +113,8 @@ Note: In your custom ``admin`` you should unregister the default ``admin`` class
 .. |pypi| image:: https://img.shields.io/pypi/v/edc-mnsi.svg
     :target: https://pypi.python.org/pypi/edc-mnsi
 
-.. |actions| image:: https://github.com/clinicedc/edc-mnsi/workflows/build/badge.svg?branch=develop
-  :target: https://github.com/clinicedc/edc-mnsi/actions?query=workflow:build
+.. |actions| image:: https://github.com/clinicedc/edc-mnsi/actions/workflows/build.yml/badge.svg
+  :target: https://github.com/clinicedc/edc-mnsi/actions/workflows/build.yml
 
 .. |codecov| image:: https://codecov.io/gh/clinicedc/edc-mnsi/branch/develop/graph/badge.svg
     :target: https://codecov.io/gh/clinicedc/edc-mnsi
