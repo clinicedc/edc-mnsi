@@ -31,7 +31,7 @@ class MnsiFieldsModelMixin(models.Model):
     mnsi_not_performed_reason = models.TextField(
         verbose_name="If NO, please provide a reason",
         max_length=200,
-        null=True,
+        default="",
         blank=True,
     )
 

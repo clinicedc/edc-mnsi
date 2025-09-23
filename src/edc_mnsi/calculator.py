@@ -76,7 +76,7 @@ class MnsiCalculator:
                 f"Expected response '{exc.args[0]}' "
                 f"was missing from received responses: {self.responses.keys()}. "
                 "Perhaps catch this in the form validation."
-            )
+            ) from exc
         return score
 
     def physical_assessment_score(self) -> float:
@@ -110,7 +110,7 @@ class MnsiCalculator:
                 f"Expected response '{exc.args[0]}' "
                 f"was missing from received responses: {self.responses.keys()}. "
                 "Perhaps catch this in the form validation."
-            )
+            ) from exc
         return score
 
     @staticmethod
@@ -125,7 +125,7 @@ class MnsiCalculator:
     def _get_ankle_reflex_points(response: str) -> float:
         if response == PRESENT_WITH_REINFORCEMENT:
             return 0.5
-        elif response == ABSENT:
+        if response == ABSENT:
             return 1.0
         return 0.0
 
@@ -133,7 +133,7 @@ class MnsiCalculator:
     def _get_vibration_perception_points(response: str) -> float:
         if response == DECREASED:
             return 0.5
-        elif response == ABSENT:
+        if response == ABSENT:
             return 1.0
         return 0.0
 
@@ -141,6 +141,6 @@ class MnsiCalculator:
     def _get_monofilament_points(response: str) -> float:
         if response == REDUCED:
             return 0.5
-        elif response == ABSENT:
+        if response == ABSENT:
             return 1.0
         return 0.0
