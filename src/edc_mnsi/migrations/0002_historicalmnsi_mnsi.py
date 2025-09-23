@@ -5,6 +5,7 @@ from django.conf import settings
 import django.core.validators
 from django.db import migrations, models
 import django.db.models.deletion
+import django.utils.timezone
 import django_audit_fields.fields.hostname_modification_field
 import django_audit_fields.fields.userfield
 import django_audit_fields.fields.uuid_auto_field
@@ -12,7 +13,6 @@ import django_audit_fields.models.audit_model_mixin
 import django_revision.revision_field
 import edc_model.models.fields.other_charfield
 import edc_sites.models
-import edc_utils.date
 import simple_history.models
 import uuid
 
@@ -441,7 +441,7 @@ class Migration(migrations.Migration):
                         ],
                     ),
                 ),
-                ("report_datetime", models.DateTimeField(default=edc_utils.date.get_utcnow)),
+                ("report_datetime", models.DateTimeField(default=django.utils.timezone.now)),
                 (
                     "abnormal_obs_left_foot",
                     models.ManyToManyField(
@@ -898,7 +898,7 @@ class Migration(migrations.Migration):
                         ],
                     ),
                 ),
-                ("report_datetime", models.DateTimeField(default=edc_utils.date.get_utcnow)),
+                ("report_datetime", models.DateTimeField(default=django.utils.timezone.now)),
                 (
                     "history_id",
                     models.UUIDField(
