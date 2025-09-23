@@ -26,7 +26,7 @@ def get_fieldsets():
         },
     )
 
-    fieldsets = (fieldset,) + get_mnsi_fieldsets()
+    fieldsets = (fieldset, *get_mnsi_fieldsets())
     fieldsets += (calculated_values_fieldset,)
     fieldsets += (audit_fieldset_tuple,)
     return fieldsets

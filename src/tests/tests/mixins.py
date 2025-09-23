@@ -3,6 +3,7 @@ from copy import deepcopy
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.test import TestCase
+from django.utils import timezone
 from edc_constants.constants import (
     ABSENT,
     NO,
@@ -14,14 +15,13 @@ from edc_constants.constants import (
     YES,
 )
 from edc_list_data import site_list_data
-from edc_utils import get_utcnow
 
 from edc_mnsi import list_data
 from edc_mnsi.models import AbnormalFootAppearanceObservations, Mnsi
 
 
 class TestCaseMixin(TestCase):
-    foot_choices = ["right", "left"]
+    foot_choices = ("right", "left")
 
     @classmethod
     def setUpTestData(cls):
@@ -33,14 +33,14 @@ class TestCaseMixin(TestCase):
         self.subject_identifier = "1234"
         self.data = dict(
             subject_identifier=self.subject_identifier,
-            report_datetime=get_utcnow(),
+            report_datetime=timezone.now(),
             site=Site.objects.get(id=settings.SITE_ID),
         )
 
     def get_mnsi_obj(
         self, abnormal_obs_left_foot=None, abnormal_obs_right_foot=None, **responses
     ):
-        """Returns an Mnsi model instance with the m2ms added"""
+        """Returns a Mnsi model instance with the M2Ms added"""
         responses.update(self.data)
         mnsi = Mnsi(**responses)
         mnsi.save()
@@ -74,7 +74,7 @@ class TestCaseMixin(TestCase):
         data.update(
             {
                 "mnsi_performed": YES,
-                "mnsi_not_performed_reason": None,
+                "mnsi_not_performed_reason": "",
             }
         )
         data.update(self.get_best_case_patient_history_data())

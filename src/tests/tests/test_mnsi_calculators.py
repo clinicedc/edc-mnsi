@@ -145,7 +145,7 @@ class TestMnsiCalculators(TestCaseMixin, TestCase):
         mnsi_calculator = MnsiCalculator(**responses)
         self.assertEqual(mnsi_calculator.physical_assessment_score(), 10)
 
-    def test_patient_history_scores_where_YES_awards_one_point(self):
+    def test_patient_history_scores_where_YES_awards_one_point(self):  # noqa: N802
         one_point_if_yes_response_questions = [
             "numb_legs_feet",  # Q1
             "burning_pain_legs_feet",  # Q2
@@ -170,7 +170,7 @@ class TestMnsiCalculators(TestCaseMixin, TestCase):
                 mnsi_calculator = MnsiCalculator(**responses)
                 self.assertEqual(mnsi_calculator.patient_history_score(), 1)
 
-    def test_patient_history_scores_where_NO_awards_one_point(self):
+    def test_patient_history_scores_where_NO_awards_one_point(self):  # noqa: N802
         one_point_if_no_response_questions = [
             "differentiate_hot_cold_water",  # Q7
             "sense_feet_when_walk",  # Q13

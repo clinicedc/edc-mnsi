@@ -1,4 +1,0 @@
-[run]
-include = edc_mnsi/*
-omit = edc_mnsi/tests/*,edc_mnsi/migrations/*
-branch = 1
