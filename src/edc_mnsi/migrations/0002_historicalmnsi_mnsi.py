@@ -4,12 +4,12 @@ import _socket
 from django.conf import settings
 import django.core.validators
 from django.db import migrations, models
+from django.utils import timezone
 import django.db.models.deletion
 import django.utils.timezone
 import django_audit_fields.fields.hostname_modification_field
 import django_audit_fields.fields.userfield
 import django_audit_fields.fields.uuid_auto_field
-import django_audit_fields.models.audit_model_mixin
 import django_revision.revision_field
 import edc_model.models.fields.other_charfield
 import edc_sites.models
@@ -41,15 +41,11 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "created",
-                    models.DateTimeField(
-                        blank=True, default=django_audit_fields.models.audit_model_mixin.utcnow
-                    ),
+                    models.DateTimeField(blank=True, default=timezone.now),
                 ),
                 (
                     "modified",
-                    models.DateTimeField(
-                        blank=True, default=django_audit_fields.models.audit_model_mixin.utcnow
-                    ),
+                    models.DateTimeField(blank=True, default=timezone.now),
                 ),
                 (
                     "user_created",
@@ -499,15 +495,11 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "created",
-                    models.DateTimeField(
-                        blank=True, default=django_audit_fields.models.audit_model_mixin.utcnow
-                    ),
+                    models.DateTimeField(blank=True, default=timezone.now),
                 ),
                 (
                     "modified",
-                    models.DateTimeField(
-                        blank=True, default=django_audit_fields.models.audit_model_mixin.utcnow
-                    ),
+                    models.DateTimeField(blank=True, default=timezone.now),
                 ),
                 (
                     "user_created",
