@@ -1,10 +1,6 @@
 from copy import deepcopy
 
-from django.conf import settings
-from django.contrib.sites.models import Site
-from django.test import TestCase
-from django.utils import timezone
-from edc_constants.constants import (
+from clinicedc_constants import (
     ABSENT,
     NO,
     NORMAL,
@@ -14,6 +10,10 @@ from edc_constants.constants import (
     PRESENT,
     YES,
 )
+from django.conf import settings
+from django.contrib.sites.models import Site
+from django.test import TestCase
+from django.utils import timezone
 from edc_list_data import site_list_data
 
 from edc_mnsi import list_data

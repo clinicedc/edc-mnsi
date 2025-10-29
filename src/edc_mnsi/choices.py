@@ -1,4 +1,4 @@
-from edc_constants.constants import (
+from clinicedc_constants import (
     ABSENT,
     DECREASED,
     NORMAL,

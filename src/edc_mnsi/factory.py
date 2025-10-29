@@ -1,6 +1,6 @@
+from clinicedc_constants import NOT_EXAMINED
 from django.db import models
 from edc_constants.choices import YES_NO_NOT_EXAMINED
-from edc_constants.constants import NOT_EXAMINED
 from edc_model import models as edc_models
 
 from .choices import (
