@@ -1,5 +1,4 @@
-from django.test import TestCase
-from edc_constants.constants import (
+from clinicedc_constants import (
     ABSENT,
     DECREASED,
     NO,
@@ -9,6 +8,7 @@ from edc_constants.constants import (
     REDUCED,
     YES,
 )
+from django.test import TestCase
 
 from edc_mnsi.calculator import (
     MnsiCalculator,

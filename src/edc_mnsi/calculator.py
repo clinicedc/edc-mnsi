@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from edc_constants.constants import (
+from clinicedc_constants import (
     ABSENT,
     DECREASED,
     NO,

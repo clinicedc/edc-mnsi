@@ -1,5 +1,4 @@
-from django.test import TestCase
-from edc_constants.constants import (
+from clinicedc_constants import (
     ABSENT,
     NO,
     NORMAL,
@@ -8,6 +7,7 @@ from edc_constants.constants import (
     PRESENT,
     YES,
 )
+from django.test import TestCase
 
 from edc_mnsi.models import Mnsi
 

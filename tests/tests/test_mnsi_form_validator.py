@@ -1,7 +1,7 @@
 from copy import deepcopy
 
+from clinicedc_constants import NO, NORMAL, NOT_EXAMINED, OTHER, PRESENT, YES
 from django.test import TestCase
-from edc_constants.constants import NO, NORMAL, NOT_EXAMINED, OTHER, PRESENT, YES
 from edc_form_validators import FormValidatorTestCaseMixin
 
 from edc_mnsi.calculator import (
