@@ -38,10 +38,7 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
 ]
 
-dependencies = [
-    "clinicedc>=2.0.26",
-    "clinicedc-constants>=1.1.0",
-]
+dependencies = ["clinicedc>=2.1.0"]
 
 [project.urls]
 Homepage = "https://github.com/clinicedc/edc-mnsi"
@@ -143,11 +140,9 @@ test = [
     "model-bakery>=1.20.5",
     "time-machine>=2.16.0",
     "edc-test-settings>=2.0.0",
-    "clinicedc>=2.0.26",
-    "clinicedc-tests>=0.1.6",
+    "clinicedc-tests>=0.3.0",
 ]
 develop = [
-    "clinicedc>=2.0.26",
     "edc-test-settings>=2.0.0",
 ]
 

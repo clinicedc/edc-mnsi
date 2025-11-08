@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 from clinicedc_constants import NO, NORMAL, NOT_EXAMINED, OTHER, PRESENT, YES
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from edc_form_validators import FormValidatorTestCaseMixin
 
 from edc_mnsi.calculator import (
@@ -14,6 +14,7 @@ from ..forms import MnsiForm, MnsiFormValidator
 from .mixins import TestCaseMixin
 
 
+@override_settings(SITE_ID=10)
 class TestMnsiFormValidator(FormValidatorTestCaseMixin, TestCaseMixin, TestCase):
     form_validator_cls = MnsiFormValidator
 
