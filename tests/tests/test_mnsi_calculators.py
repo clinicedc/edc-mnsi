@@ -8,7 +8,7 @@ from clinicedc_constants import (
     REDUCED,
     YES,
 )
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 from edc_mnsi.calculator import (
     MnsiCalculator,
@@ -19,6 +19,7 @@ from edc_mnsi.calculator import (
 from .mixins import TestCaseMixin
 
 
+@override_settings(SITE_ID=10)
 class TestMnsiCalculators(TestCaseMixin, TestCase):
     def test_calculator_instantiated_with_dict(self):
         responses = self.get_best_case_answers()

@@ -7,13 +7,14 @@ from clinicedc_constants import (
     PRESENT,
     YES,
 )
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 from edc_mnsi.models import Mnsi
 
 from .mixins import TestCaseMixin
 
 
+@override_settings(SITE_ID=10)
 class TestMnsiModel(TestCaseMixin, TestCase):
     def test_mnsi_calculations_saved_with_best_case_responses(self):
         responses = self.get_best_case_answers()
