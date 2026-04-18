@@ -39,7 +39,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "clinicedc>=2.9.3",
+    "clinicedc>=2.9.4",
 ]
 
 [project.urls]
@@ -148,4 +148,3 @@ dev = [
 edc-mnsi = { workspace = true }
 clinicedc = { path = "../clinicedc", editable = true }
 clinicedc-tests = { path = "../clinicedc-tests", editable = true }
-edc-test-settings = { path = "../edc-test-settings", editable = true }
