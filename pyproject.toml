@@ -11,7 +11,7 @@ namespace = false
 name = "edc-mnsi"
 version = "1.4.0"
 description = "MNSI form/model for the clinicedc/edc and other django projects"
-readme = {file = "README.rst", content-type = "text/x-rst"}
+readme = { file = "README.rst", content-type = "text/x-rst" }
 license = "GPL-3.0-or-later"
 license-files = ["LICEN[CS]E*"]
 requires-python = ">=3.12,<3.14"
@@ -38,7 +38,9 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
 ]
 
-dependencies = ["clinicedc>=2.1.0"]
+dependencies = [
+    "clinicedc>=2.9.3",
+]
 
 [project.urls]
 Homepage = "https://github.com/clinicedc/edc-mnsi"
@@ -93,7 +95,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-    "__init__.py" = ["F401"]
+"__init__.py" = ["F401"]
 
 [tool.ruff.lint.mccabe]
 max-complexity = 12
@@ -117,8 +119,8 @@ show_missing = true
 skip_covered = true
 omit = ["requirements.txt", "*/migrations/*"]
 exclude_lines = [
-  "pragma: no cover",
-  "if TYPE_CHECKING:",
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
 ]
 
 [dependency-groups]
@@ -133,19 +135,14 @@ docs = [
     "sphinx-inline-tabs>=2023.4.21",
 ]
 
-test = [
+dev = [
+    "clinicedc-tests>=1.1.0",
     "coverage>=7.10.1",
     "tox-uv>=1.26.2",
     "faker>=37.4.2",
     "model-bakery>=1.20.5",
     "time-machine>=2.16.0",
-    "edc-test-settings>=2.0.0",
-    "clinicedc-tests>=0.3.0",
 ]
-develop = [
-    "edc-test-settings>=2.0.0",
-]
-
 
 [tool.uv.sources]
 edc-mnsi = { workspace = true }
