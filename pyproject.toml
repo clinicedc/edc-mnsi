@@ -9,7 +9,7 @@ namespace = false
 
 [project]
 name = "edc-mnsi"
-version = "1.5.0"
+version = "2.0.0"
 description = "MNSI form/model for the clinicedc/edc and other django projects"
 readme = { file = "README.rst", content-type = "text/x-rst" }
 license = "GPL-3.0-or-later"
@@ -41,7 +41,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "clinicedc>=2.9.4",
+    "clinicedc>=3.0.0",
 ]
 
 [project.urls]
@@ -138,12 +138,7 @@ docs = [
 ]
 
 dev = [
-    "clinicedc-tests>=1.1.0",
-    "coverage>=7.10.1",
-    "tox-uv>=1.26.2",
-    "faker>=37.4.2",
-    "model-bakery>=1.20.5",
-    "time-machine>=2.16.0",
+    "clinicedc-tests>=1.2.2",
 ]
 
 [tool.uv.sources]
